@@ -1513,7 +1513,7 @@ into chunks of chunk_size size. Returns the number of result sets deleted"""
             newrelic.agent.record_exception(
                 exc=ValueError(
                     "result_set_ids lookup didn't have expected value: {}".format(revision)),
-                params={"result_set_ids": result_set_ids}
+                params=result_set_ids
             )
             raise e
 
