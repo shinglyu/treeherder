@@ -1047,6 +1047,11 @@ into chunks of chunk_size size. Returns the number of result sets deleted"""
         result_set_ids = self.get_resultset_top_revision_lookup(
             unique_revisions
         )
+        # this will be keyed ONLY by long_revision, at this point.
+        # Add the resultsets keyed by short_revision in case the job came in
+        # with a short revision.
+        self._add_short_revision_lookups(result_set_ids)
+
 
         average_job_durations = self.get_average_job_durations(
             reference_data_signatures
