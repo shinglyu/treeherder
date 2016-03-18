@@ -1039,7 +1039,10 @@ into chunks of chunk_size size. Returns the number of result sets deleted"""
                     logger.exception(e)
                     raise e
                 else:
-                    newrelic.agent.record_exception(params=datum)
+                    job = datum.get("job", {})
+                    params = datum
+                    params.update(job)
+                    newrelic.agent.record_exception(params=params)
 
                 # skip any jobs that hit errors in these stages.
                 continue
@@ -1511,6 +1514,8 @@ into chunks of chunk_size size. Returns the number of result sets deleted"""
         except KeyError as e:
             params = result_set_ids
             params["job_guid"] = job_guid
+            params["job_state"] = job_state
+            params["result"] = result
             newrelic.agent.record_exception(
                 params=params
             )
