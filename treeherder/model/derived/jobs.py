@@ -1052,7 +1052,6 @@ into chunks of chunk_size size. Returns the number of result sets deleted"""
         # with a short revision.
         self._add_short_revision_lookups(result_set_ids)
 
-
         average_job_durations = self.get_average_job_durations(
             reference_data_signatures
         )
@@ -1511,8 +1510,6 @@ into chunks of chunk_size size. Returns the number of result sets deleted"""
             result_set = result_set_ids[revision]
         except KeyError as e:
             newrelic.agent.record_exception(
-                exc=ValueError(
-                    "result_set_ids lookup didn't have expected value: {}".format(revision)),
                 params=result_set_ids
             )
             raise e
