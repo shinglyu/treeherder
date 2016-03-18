@@ -1509,8 +1509,10 @@ into chunks of chunk_size size. Returns the number of result sets deleted"""
         try:
             result_set = result_set_ids[revision]
         except KeyError as e:
+            params = result_set_ids
+            params["job_guid"] = job_guid
             newrelic.agent.record_exception(
-                params=result_set_ids
+                params=params
             )
             raise e
 
