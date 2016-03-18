@@ -1044,7 +1044,7 @@ into chunks of chunk_size size. Returns the number of result sets deleted"""
                 # skip any jobs that hit errors in these stages.
                 continue
 
-        result_set_ids = self.get_resultset_all_revision_lookup(
+        result_set_ids = self.get_resultset_top_revision_lookup(
             unique_revisions
         )
 
