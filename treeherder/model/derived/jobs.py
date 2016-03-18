@@ -1507,7 +1507,16 @@ into chunks of chunk_size size. Returns the number of result sets deleted"""
         # Load job_placeholders
 
         # replace revision_hash with id
-        result_set = result_set_ids[revision]
+        try:
+            result_set = result_set_ids[revision]
+        except KeyError as e:
+            newrelic.agent.record_exception(
+                exc=ValueError(
+                    "result_set_ids lookup didn't have expected value: {}".format(revision)),
+                params={"result_set_ids": result_set_ids}
+            )
+            raise e
+
         job_placeholders[index][
             self.JOB_PH_RESULT_SET_ID] = result_set['id']
         push_timestamps[result_set['id']] = result_set['push_timestamp']
