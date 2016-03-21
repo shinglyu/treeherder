@@ -1039,10 +1039,10 @@ into chunks of chunk_size size. Returns the number of result sets deleted"""
                     logger.exception(e)
                     raise e
                 else:
-                    job = datum.get("job", {})
-                    params = datum
-                    params.update(job)
-                    newrelic.agent.record_exception(params=params)
+                    # flatten the object a bit so that job fields show in
+                    # new relic in a more read-able format
+                    datum.update(datum.get("job", {}))
+                    newrelic.agent.record_exception(params=datum)
 
                 # skip any jobs that hit errors in these stages.
                 continue
@@ -1239,7 +1239,6 @@ into chunks of chunk_size size. Returns the number of result sets deleted"""
         if not len(rh):
             raise ValueError("Revision hash not found: {}".format(
                 revision_hash))
-            # allow the next line to except out and be handled later.
         return rh[0]["long_revision"]
 
     def _load_ref_and_job_data_structs(

@@ -636,7 +636,7 @@
                    FROM result_set AS rs
                    WHERE rs.revision_hash = ?
                    ",
-            "host_type": "read_host"
+            "host_type": "master_host"
         },
         "get_result_set_details":{
             "sql":"SELECT
