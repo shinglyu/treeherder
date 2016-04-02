@@ -7,6 +7,7 @@ from dateutil import parser
 
 from treeherder.etl.schema import job_json_schema
 from treeherder.model.derived.jobs import JobsModel
+from treeherder.model.models import PulseStore, Repository
 
 logger = logging.getLogger(__name__)
 
@@ -38,11 +39,17 @@ class JobLoader:
         for project, job_list in validated_jobs.items():
             with JobsModel(project) as jobs_model:
                 storeable_job_list = []
+                repo = Repository.objects.get(name=project)
                 for pulse_job in job_list:
                     if pulse_job["state"] != "unscheduled":
                         try:
                             storeable_job_list.append(
                                 self.transform(pulse_job)
+                            )
+                            PulseStore.objects.create(
+                                repository=repo,
+                                revision=pulse_job["origin"]["revision"],
+                                message=pulse_job
                             )
                         except AttributeError:
                             logger.warn("Skipping job due to bad attribute",

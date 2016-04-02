@@ -385,23 +385,23 @@ PULSE_DATA_INGESTION_EXCHANGES = env.json(
         #         'staging'
         #     ]
         # },
-        # {
-        #     "name": "exchange/treeherder-test/jobs",
-        #     "projects": [
-        #         'mozilla-inbound'
-        #     ],
-        #     "destinations": [
-        #         'production'
-        #         'staging'
-        #     ]
-        #
-        # }
+        {
+            "name": "exchange/treeherder-test/jobs",
+            "projects": [
+                'mozilla-inbound'
+            ],
+            "destinations": [
+                'production'
+                'staging'
+            ]
+
+        }
         # ... other CI systems
     ])
 
 # Used to specify the PulseGuardian account that will be used to create
 # ingestion queues for the exchanges specified in ``PULSE_DATA_INGESTION_EXCHANGES``.
-# See https://pulse.mozilla.org/whats_pulse for more info.
+# See https://pulseguardian.mozilla.org for more info.
 # Example: "amqp://myuserid:mypassword@pulse.mozilla.org:5672/"
 PULSE_DATA_INGESTION_CONFIG = env.url("PULSE_DATA_INGESTION_CONFIG", default="")
 
@@ -415,6 +415,10 @@ PULSE_DATA_INGESTION_QUEUES_DURABLE = env.bool("PULSE_DATA_INGESTION_QUEUES_DURA
 # For local data ingestion, you probably should set this to True
 PULSE_DATA_INGESTION_QUEUES_AUTO_DELETE = env.bool("PULSE_DATA_INGESTION_QUEUES_AUTO_DELETE",
                                                    default=False)
+
+# The URL used to fetch recent history Pulse ingestion jobs.
+PULSE_STORE_URL = env.url("PULSE_STORE_URL",
+                          default="https://treeherder.mozilla.org/api/pulse_store/")
 
 # The git-ignored settings_local.py file should only be used for local development.
 if env.bool("ENABLE_LOCAL_SETTINGS_FILE", default=False):
