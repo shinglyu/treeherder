@@ -1847,21 +1847,23 @@ into chunks of chunk_size size. Returns the number of result sets deleted"""
 
     def _get_resultset_updates(self, result_sets,
                                resultsets_before):
-        # find the existing resultsets that meet the requirements of needing
-        # to be updated.
-        rs_need_update = set()
-        for rev, resultset in resultsets_before.iteritems():
-            if resultset["push_timestamp"] == 0:
-                rs_need_update.add(rev)
+        # whether or not an existing resultset needs updating
+        def needs_update(rs):
+            return rs["push_timestamp"] == 0 or len(rs["long_revision"]) < 40
 
         # collect the new values for the resultsets that needed updating
         # The revision ingested earlier that needs update could be either
         # 40 or 12 character.  And the new one coming in could be either as
         # well.  The rs_need_update will be keyed by both, but we must
         # check for both 12 and 40.
-        resultset_updates = [x for x in result_sets
-                             if x["revision"] in rs_need_update or
-                             x["revision"][:12] in rs_need_update]
+        resultset_updates = []
+        for rs in result_sets:
+            rev = rs["revision"]
+            rs_before = resultsets_before.get(rev, resultsets_before.get(
+                rev[:12], None))
+            if rs_before and needs_update(rs_before):
+                rs["revision_hash"] = rs_before["revision_hash"]
+                resultset_updates.append(rs)
         return resultset_updates
 
     def _get_resultset_inserts(self, result_sets,

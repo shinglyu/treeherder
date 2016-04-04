@@ -514,6 +514,53 @@ def test_store_result_set_revisions(jm, sample_resultset):
     assert stored["short_revision"] == "997b28cb8737"
 
 
+def xx_test_store_result_fixup_missing_mapped_revisions(jm, sample_resultset):
+    """
+    Test adding revisions for a normal resultset that has no mapped revisions.
+
+    Not for a skeleton resultset with push_timestamp == 0
+    """
+    broken_resultset = copy.deepcopy(sample_resultset[8:9])[0]
+    broken_resultset["revisions"] = []
+    jm.store_result_set_data([broken_resultset])
+
+    broken_stored = jm.get_dhub().execute(proc="jobs_test.selects.result_sets")[0]
+    assert broken_stored["long_revision"] == "997b28cb87373456789012345678901234567890"
+
+    fixup_resultset = sample_resultset[8:9][0]
+    jm.store_result_set_data([fixup_resultset])
+
+    fixed_stored = jm.get_result_set_list(0, 10)
+    assert len(fixed_stored) == 1, "Should have a resultset with revisions now"
+    assert fixed_stored[0]["revision"] == "997b28cb87373456789012345678901234567890"
+    assert len(fixed_stored[0]["revisions"]) == 10
+
+
+def test_store_result_fixup_missing_mapped_long_revision(jm, sample_resultset):
+    """
+    Test adding revisions for a normal resultset that has no mapped revisions.
+
+    Not for a skeleton resultset with push_timestamp == 0
+    """
+    broken_resultset = copy.deepcopy(sample_resultset[8:9])[0]
+    broken_resultset["revision"] = broken_resultset["revision"][:12]
+    jm.store_result_set_data([broken_resultset])
+
+    broken_stored = jm.get_dhub().execute(
+        proc="jobs_test.selects.result_sets")[0]
+    assert broken_stored[
+               "long_revision"] == "997b28cb8737"
+
+    fixup_resultset = sample_resultset[8:9][0]
+    jm.store_result_set_data([fixup_resultset])
+
+    fixed_stored = jm.get_result_set_list(0, 10)
+    assert len(fixed_stored) == 1, "Should have a resultset with revisions now"
+    assert fixed_stored[0][
+               "revision"] == "997b28cb87373456789012345678901234567890"
+    assert len(fixed_stored[0]["revisions"]) == 10
+
+
 def test_get_job_data(jm, test_project, refdata, sample_data,
                       sample_resultset, test_repository, mock_log_parser):
 
