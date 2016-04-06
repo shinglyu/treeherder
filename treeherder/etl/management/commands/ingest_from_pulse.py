@@ -19,10 +19,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         config = settings.PULSE_DATA_INGESTION_CONFIG
-        userid = urlparse(config).username
+        userid = config["userid"]
         durable = settings.PULSE_DATA_INGESTION_QUEUES_DURABLE
         auto_delete = settings.PULSE_DATA_INGESTION_QUEUES_AUTO_DELETE
-        connection = Connection(config)
+        connection = Connection(**config)
         consumer = JobConsumer(connection)
 
         try:

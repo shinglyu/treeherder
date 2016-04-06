@@ -201,6 +201,7 @@ CELERY_QUEUES = [
     Queue('calculate_durations', Exchange('default'), routing_key='calculate_durations'),
     Queue('fetch_bugs', Exchange('default'), routing_key='fetch_bugs'),
     Queue('generate_perf_alerts', Exchange('default'), routing_key='generate_perf_alerts'),
+    Queue('store_pulse_jobs', Exchange('default'), routing_key='store_pulse_jobs'),
 ]
 
 CELERY_ACCEPT_CONTENT = ['json']
@@ -385,17 +386,17 @@ PULSE_DATA_INGESTION_EXCHANGES = env.json(
         #         'staging'
         #     ]
         # },
-        {
-            "name": "exchange/treeherder-test/jobs",
-            "projects": [
-                'mozilla-inbound'
-            ],
-            "destinations": [
-                'production'
-                'staging'
-            ]
-
-        }
+        # {
+        #     "name": "exchange/treeherder-test/jobs",
+        #     "projects": [
+        #         'mozilla-inbound'
+        #     ],
+        #     "destinations": [
+        #         'production'
+        #         'staging'
+        #     ]
+        #
+        # }
         # ... other CI systems
     ])
 
