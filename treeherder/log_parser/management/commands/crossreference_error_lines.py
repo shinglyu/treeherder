@@ -3,6 +3,7 @@ import re
 
 from django.core.management.base import (BaseCommand,
                                          CommandError)
+from django.db import transaction
 from mozlog.formatters.tbplformatter import TbplFormatter
 
 from treeherder.model.derived import (ArtifactsModel,
@@ -67,6 +68,7 @@ class Command(BaseCommand):
             self.crossreference_error_lines(repository, job_guid, failure_lines,
                                             text_log_summary, bug_suggestions)
 
+    @transaction.atomic
     def crossreference_error_lines(self, repository, job_guid, failure_lines, text_log_summary,
                                    bug_suggestions):
         """Populate the TextLogSummary and TextLogSummaryLine tables for a
