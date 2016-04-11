@@ -449,6 +449,7 @@ class JobsModel(TreeherderModelBase):
             ],
             debug_show=self.DEBUG
         )
+        self.update_last_job_classification(job_id)
 
     def get_manual_classification_line(self, job_id):
         """
