@@ -1070,6 +1070,7 @@ into chunks of chunk_size size. Returns the number of result sets deleted"""
 
         return aggregate_details
 
+    @utils.datasource_transaction
     def store_job_data(self, data):
         """
         Store JobData instances into jobs db

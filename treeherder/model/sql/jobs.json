@@ -722,5 +722,19 @@
                     ref_job.job_guid = ?",
             "host_type": "read_host"
         }
+    },
+    "transaction": {
+        "start": {
+            "sql": "START TRANSACTION",
+            "host_type": "read_host"
+        },
+        "commit": {
+            "sql": "COMMIT",
+            "host_type": "read_host"
+        },
+        "rollback": {
+            "sql": "ROLLBACK",
+            "host_type": "read_host"
+        }
     }
 }

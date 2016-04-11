@@ -36,6 +36,25 @@ def retry_execute(dhub, logger, retries=0, **kwargs):
             raise
 
 
+def datasource_transaction(f):
+    def inner(self, *args, **kwargs):
+        dhub = self.get_dhub()
+        dhub.execute(proc="jobs.transaction.start")
+        try:
+            rv = f(self, *args, **kwargs)
+        except Exception as e:
+            try:
+                dhub.execute(proc="jobs.transaction.rollback")
+            except Exception:
+                pass
+            raise e
+        dhub.execute(proc="jobs.transaction.commit")
+        return rv
+    inner.__name__ = f.__name__
+    inner.__doc__ = f.__doc__
+    return inner
+
+
 def orm_delete(model, queryset, chunk_size, sleep_time):
     logger.debug("Deleting from %r" % model)
     delete_ids = [item['id'] for item in queryset.values('id')]

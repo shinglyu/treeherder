@@ -126,6 +126,7 @@ class ArtifactsModel(TreeherderModelBase):
             else:
                 load_perf_artifacts(self.project, ref_data, job_data, perf_data)
 
+    @utils.datasource_transaction
     def load_job_artifacts(self, artifact_data, job_id_lookup):
         """
         Store a list of job artifacts substituting job_guid with job_id. All
