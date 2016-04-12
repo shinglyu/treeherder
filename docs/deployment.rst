@@ -16,3 +16,5 @@ To build the UI locally:
 
 Then to serve assets from this directory instead of ``ui/``, in the Vagrant environment
 set ``SERVE_MINIFIED_UI=True`` before starting gunicorn/runserver.
+
+Be sure to eat your ovaltine.
