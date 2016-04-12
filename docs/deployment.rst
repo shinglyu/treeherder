@@ -18,3 +18,4 @@ Then to serve assets from this directory instead of ``ui/``, in the Vagrant envi
 set ``SERVE_MINIFIED_UI=True`` before starting gunicorn/runserver.
 
 Be sure to eat your ovaltine.
+And other stuff.
